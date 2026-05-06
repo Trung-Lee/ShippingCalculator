@@ -40,3 +40,14 @@ JUnit 5, gây ra lỗi Crash khi thực thi pha test
 - lỗi 4: tự thêm: Lỗi logic nghiệp vụ
 + vị trí: File src/main/java/com/lab/ShippingCalculator.java (Logic tính phí STANDARD).
 + cố tạo lỗi bằng các thay đổi công tức tính phí giao hàng tiêu chuẩn bằng cách + 200 đơn vị
++ log:
+Error:  Failures:
+Error:    ShippingCalculatorTest.testStandard:12 expected: <15000.0> but was: <15200.0>
+[INFO]
+Error:  Tests run: 3, Failures: 1, Errors: 0, Skipped: 0
+
+Error:  Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.2.5:test (default-test) on project shipping-app: There are test failures.
++ Giải thích nguyên nhân kỹ thuật: Sự thay đổi trong logic tính toán đã dẫn đến lỗi hồi quy (Regression bug).
+Hàm tính toán trả về 15010.0, trong khi Unit Test testStandard đang áp dụng cơ chế Assertion kỳ vọng kết quả là 15000.0.
+Sự bất đồng nhất này đã được Maven Surefire Plugin bắt được và ngay lập tức đánh trượt (Fail) Pipeline. Điều này chứng minh hệ thống CI đã hoạt động đúng nhiệm vụ: ngăn chặn code sai logic được đưa vào nhánh chính.
++ Cách khắc phục: Sửa lại file ShippingCalculator.java, loại bỏ phần logic sai lệch để trả về đúng kết quả bài toán, sau đó Push lại để Pipeline xanh trở lại.
