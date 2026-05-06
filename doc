@@ -5,12 +5,16 @@ Error:  The goal you specified requires a project to execute but there is no POM
 Error:
 Error:  To see the full stack trace of the errors, re-run Maven with the -e switch.
 Error:  Re-run Maven using the -X switch to enable full debug logging.
-Error:
-Error:  For more information about the errors and possible solutions, please read the following articles:
-Error:  [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MissingProjectException
-Error: Process completed with exit code 1.
 + nguyên nhân: Máy chủ runner (Ubuntu) do GitHub Actions cấp phát ban đầu là một máy ảo hoàn toàn trống.
 Pipeline đã ra lệnh chạy Maven ngay lập tức mà quên mất thao tác kéo (clone) mã nguồn từ repository về máy ảo.
 Do không tìm thấy file pom.xml trong thư mục gốc, tiến trình build bị đóng gói.
 + fix: thêm actions/checkout vào đầu dnah sách steps để cấp quyền và lấy mã nguyền về trc khi setup JDK
 
+- lỗi 2: phân giải Dependency ảo (Resolution Error)
++ vị trí: pom.xml (tại thẻ <version> của dependency logback-classic)
++ Log minh chứng:
+Error:  Failed to execute goal on project shipping-app: Could not resolve dependencies for project com.lab:shipping-app:jar:1.0-SNAPSHOT
+Error:  dependency: ch.qos.logback:logback-classic:jar:9.9.9 (compile)
+Error:  	Could not find artifact ch.qos.logback:logback-classic:jar:9.9.9 in central (https://repo.maven.apache.org/maven2)
++ nguyên nhân: sử dụng thư viện logback-classic với phiên bản 9.9.9 -> phiên bản ko tồn tại
++ fix: sửa thành phiên bản có tồn tại
