@@ -18,3 +18,25 @@ Error:  dependency: ch.qos.logback:logback-classic:jar:9.9.9 (compile)
 Error:  	Could not find artifact ch.qos.logback:logback-classic:jar:9.9.9 in central (https://repo.maven.apache.org/maven2)
 + nguyên nhân: sử dụng thư viện logback-classic với phiên bản 9.9.9 -> phiên bản ko tồn tại
 + fix: sửa thành phiên bản có tồn tại
+
+- lỗi 3: viết test nhưng ko đc lồi ra để check
++ vị trí: pom.xml
++ Log minh chứng: (trên Github ko tìm ra)
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] --- jar:3.4.1:jar (default-jar) @ shipping-app ---
+[INFO] Building jar: D:\Code practice\Java\ShippingCalculator\target\shipping-app-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.712 s
+[INFO] Finished at: 2026-05-06T15:42:38+07:00
+[INFO] --------------------------------------------------------------
++ nguyên nhân: biên dịch bằng Java 17, plugin chịu trách nhiệm chạy Unit Test là maven-surefire-plugin lại được cấu hình
+ở phiên bản quá cũ. Plugin này không có khả năng đọc hiểu cấu trúc bytecode của Java 17 và không hỗ trợ tốt nền tảng
+JUnit 5, gây ra lỗi Crash khi thực thi pha test
++ fix: thay bằng bản mới hơn
+
+- lỗi 4: tự thêm: Lỗi logic nghiệp vụ
++ vị trí: File src/main/java/com/lab/ShippingCalculator.java (Logic tính phí STANDARD).
++ cố tạo lỗi bằng các thay đổi công tức tính phí giao hàng tiêu chuẩn bằng cách + 200 đơn vị
